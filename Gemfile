@@ -64,3 +64,5 @@ group :development do
   # gem "spring"
 end
 
+
+gem "shakapacker", "= 7.0"
