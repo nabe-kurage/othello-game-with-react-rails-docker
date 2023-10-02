@@ -64,5 +64,7 @@ group :development do
   # gem "spring"
 end
 
-
+# shakapackerは6.0.0にした方が安定して動くかもしれない　v6.6.0
 gem "shakapacker", "= 7.0"
+
+gem "react-rails", "= 3.1"
