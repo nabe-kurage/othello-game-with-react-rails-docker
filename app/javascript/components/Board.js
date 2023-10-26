@@ -11,8 +11,128 @@ import {
 function Board() {
   const [diskSet, setDiskSet] = useState({ ...defaultDiskSet });
   const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
+  const [winnerColor, setwinnerColor] = useState(null);
 
   const squareClickHandlar = (column, row) => {
+    // ゲーム終了、コマの置けるかどうかのチェック
+    if (isGameOver() || !isPlaceableSquare(column, row)) return;
+
+    renewDiskSet(column, row);
+    changePlayer();
+  };
+
+  const isGameOver = () => {
+    return !!winnerColor;
+  };
+
+  const isPlaceableSquare = (column, row) => {
+    if (isOccupiedSquare(column, row)) {
+      //   alert('すでに置かれたマスです');
+      return false;
+    }
+
+    // となりあったマスのコマの状態を見て置けるかどうかを判断
+    for (let i = 0; i < directionsArray.length; i++) {
+      if (
+        isPossibleToTurnOverOneDirection(
+          column,
+          row,
+          directionsArray[i],
+          0,
+          false
+        )
+      ) {
+        // これ何ようだっけ？
+        // putDisk(column, row);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const isOccupiedSquare = (column, row) => {
+    return (
+      diskSet.whiteCol[column]?.indexOf(row) > -1 ||
+      diskSet.blackCol[column]?.indexOf(row) > -1
+    );
+  };
+
+  const isPossibleToTurnOverOneDirection = (
+    column,
+    row,
+    incrementArray,
+    index,
+    isAi
+  ) => {
+    let PlayerDiskSet, OpponentPlayerDiskSet;
+    if (isAi) {
+      PlayerDiskSet = isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+    } else {
+      PlayerDiskSet = isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+    }
+
+    const incrementedColumn = column + incrementArray[0];
+    const incrementedRow = row + incrementArray[1];
+
+    // 　敵のコマがある場合は、再帰関数で次のマスをチェック
+    if (
+      foundOpponentDisk(
+        OpponentPlayerDiskSet,
+        incrementedColumn,
+        incrementedRow
+      )
+    ) {
+      return isPossibleToTurnOverOneDirection(
+        incrementedColumn,
+        incrementedRow,
+        incrementArray,
+        index + 1,
+        isAi
+      );
+    }
+
+    // 最終的に自分のコマがあるかチェック
+    return foundMyDisk(index, PlayerDiskSet, incrementedColumn, incrementedRow);
+  };
+
+  //   foundOpponentDiskとfoundMyDiskはまとめられそう
+  const foundOpponentDisk = (
+    OpponentPlayerDiskSet,
+    incrementedColumn,
+    incrementedRow
+  ) => {
+    return (
+      diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
+        incrementedRow
+      ) > -1
+    );
+  };
+  const foundMyDisk = (
+    index,
+    PlayerDiskSet,
+    incrementedColumn,
+    incrementedRow
+  ) => {
+    // indexはなぜ必要？
+    return (
+      index > 0 &&
+      diskSet[PlayerDiskSet][incrementedColumn]?.indexOf(incrementedRow) > -1
+    );
+  };
+
+  //   const putDisk = (column, row) => {
+  //     directionsArray.forEach((direction) => {
+  //       if (
+  //         isPossibleToTurnOverOneDirection(column, row, direction, 0, false)
+  //       ) {
+  //         turnOverDisk(column, row, direction, false);
+  //       }
+  //     });
+  //   };
+
+  const renewDiskSet = (column, row) => {
     let newDiskSet, colName;
 
     // プレイヤーの色によってセットするデータを変更
@@ -27,6 +147,10 @@ function Board() {
     setDiskSet({ ...diskSet, [colName]: newDiskSet });
   };
 
+  const changePlayer = () => {
+    setNextPlayerBlack((isNextPlayerBlack) => !isNextPlayerBlack);
+  };
+
   const columns = [];
   for (let i = 0; i < squareNum.column; i++) {
     columns.push(
@@ -38,6 +162,7 @@ function Board() {
       />
     );
   }
+
   return <div className="board">{columns}</div>;
 }
 
