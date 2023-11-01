@@ -9,6 +9,10 @@ import {
 } from './constData';
 
 function Board() {
+  let [count, setCount] = useState(0);
+  let [skipCounter, setSkipCounter] = useState(0);
+  let [blackDisksCount, setBlackDisksCount] = useState(2);
+  let [whiteDisksCount, setWhiteDisksCount] = useState(2);
   const [diskSet, setDiskSet] = useState({ ...defaultDiskSet });
   const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
   const [winnerColor, setwinnerColor] = useState(null);
@@ -17,8 +21,14 @@ function Board() {
     // ゲーム終了、コマの置けるかどうかのチェック
     if (isGameOver() || !isPlaceableSquare(column, row)) return;
 
-    renewDiskSet(column, row);
+    putDisk(column, row);
+    checkSurroundingAndFlip(column, row);
+
     changePlayer();
+    setCount(count + 1);
+    setSkipCounter(0);
+
+    countDisks();
   };
 
   const isGameOver = () => {
@@ -27,7 +37,6 @@ function Board() {
 
   const isPlaceableSquare = (column, row) => {
     if (isOccupiedSquare(column, row)) {
-      //   alert('すでに置かれたマスです');
       return false;
     }
 
@@ -42,8 +51,6 @@ function Board() {
           false
         )
       ) {
-        // これ何ようだっけ？
-        // putDisk(column, row);
         return true;
       }
     }
@@ -93,11 +100,13 @@ function Board() {
       );
     }
 
+    // はじめ(0)は自分のコマなので除外
+    if (index === 0) return false;
     // 最終的に自分のコマがあるかチェック
-    return foundMyDisk(index, PlayerDiskSet, incrementedColumn, incrementedRow);
+    return foundMyDisk(PlayerDiskSet, incrementedColumn, incrementedRow);
   };
 
-  //   foundOpponentDiskとfoundMyDiskはまとめられそう
+  // foundOpponentDiskとfoundMyDiskはまとめられそう
   const foundOpponentDisk = (
     OpponentPlayerDiskSet,
     incrementedColumn,
@@ -109,30 +118,68 @@ function Board() {
       ) > -1
     );
   };
-  const foundMyDisk = (
-    index,
-    PlayerDiskSet,
-    incrementedColumn,
-    incrementedRow
-  ) => {
-    // indexはなぜ必要？
+  const foundMyDisk = (PlayerDiskSet, incrementedColumn, incrementedRow) => {
     return (
-      index > 0 &&
       diskSet[PlayerDiskSet][incrementedColumn]?.indexOf(incrementedRow) > -1
     );
   };
 
-  //   const putDisk = (column, row) => {
-  //     directionsArray.forEach((direction) => {
-  //       if (
-  //         isPossibleToTurnOverOneDirection(column, row, direction, 0, false)
-  //       ) {
-  //         turnOverDisk(column, row, direction, false);
-  //       }
-  //     });
-  //   };
+  const checkSurroundingAndFlip = (column, row) => {
+    directionsArray.forEach((direction) => {
+      if (isPossibleToTurnOverOneDirection(column, row, direction, 0, false)) {
+        turnOverDisk(column, row, direction, false);
+      }
+    });
+  };
 
-  const renewDiskSet = (column, row) => {
+  const turnOverDisk = (column, row, incrementArray, isAi) => {
+    let PlayerDiskSet, OpponentPlayerDiskSet;
+    if (isAi) {
+      PlayerDiskSet = isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+    } else {
+      PlayerDiskSet = isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+    }
+
+    // ERROR: 一個以上ひっくり返すときに一個しかひっくり返らない -> SOLVE: whileして繰り返す
+    let incrementedColumn = column + incrementArray[0];
+    let incrementedRow = row + incrementArray[1];
+    let newDiskSet = diskSet;
+
+    while (
+      diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
+        incrementedRow
+      ) > -1
+    ) {
+      // 自分の増える持ちコマ
+      if (newDiskSet[PlayerDiskSet][incrementedColumn]) {
+        newDiskSet[PlayerDiskSet][incrementedColumn].push(incrementedRow);
+      } else {
+        newDiskSet[PlayerDiskSet][incrementedColumn] = [incrementedRow];
+      }
+
+      // 相手の減る持ちコマ
+      newDiskSet[OpponentPlayerDiskSet][incrementedColumn].splice(
+        diskSet[OpponentPlayerDiskSet][incrementedColumn].indexOf(
+          incrementedRow
+        ),
+        1
+      );
+
+      incrementedColumn = incrementedColumn + incrementArray[0];
+      incrementedRow = incrementedRow + incrementArray[1];
+    }
+
+    //ERROR: はじめ白→黒で白にする際になってくれないのを直す→[-1,-1]のところが値が間違っていた
+    setDiskSet({
+      ...diskSet,
+      [PlayerDiskSet]: newDiskSet[PlayerDiskSet],
+      [OpponentPlayerDiskSet]: newDiskSet[OpponentPlayerDiskSet],
+    });
+  };
+
+  const putDisk = (column, row) => {
     let newDiskSet, colName;
 
     // プレイヤーの色によってセットするデータを変更
@@ -149,6 +196,20 @@ function Board() {
 
   const changePlayer = () => {
     setNextPlayerBlack((isNextPlayerBlack) => !isNextPlayerBlack);
+  };
+
+  const countDisks = () => {
+    let currentBlackSum = 0;
+    for (const i in diskSet.blackCol) {
+      currentBlackSum += diskSet.blackCol[i].length;
+    }
+    setBlackDisksCount(currentBlackSum);
+
+    let currentWhiteSum = 0;
+    for (const i in diskSet.whiteCol) {
+      currentWhiteSum += diskSet.whiteCol[i].length;
+    }
+    setWhiteDisksCount(currentWhiteSum);
   };
 
   const columns = [];
