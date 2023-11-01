@@ -67,7 +67,7 @@ function Board() {
   const isPossibleToTurnOverOneDirection = (
     column,
     row,
-    incrementArray,
+    direction,
     index,
     isAi
   ) => {
@@ -80,8 +80,8 @@ function Board() {
       OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
     }
 
-    const incrementedColumn = column + incrementArray[0];
-    const incrementedRow = row + incrementArray[1];
+    const incrementedColumn = column + direction[0];
+    const incrementedRow = row + direction[1];
 
     // 　敵のコマがある場合は、再帰関数で次のマスをチェック
     if (
@@ -94,7 +94,7 @@ function Board() {
       return isPossibleToTurnOverOneDirection(
         incrementedColumn,
         incrementedRow,
-        incrementArray,
+        direction,
         index + 1,
         isAi
       );
@@ -132,7 +132,7 @@ function Board() {
     });
   };
 
-  const turnOverDisk = (column, row, incrementArray, isAi) => {
+  const turnOverDisk = (column, row, direction, isAi) => {
     let PlayerDiskSet, OpponentPlayerDiskSet;
     if (isAi) {
       PlayerDiskSet = isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
@@ -142,10 +142,9 @@ function Board() {
       OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
     }
 
-    // ERROR: 一個以上ひっくり返すときに一個しかひっくり返らない -> SOLVE: whileして繰り返す
-    let incrementedColumn = column + incrementArray[0];
-    let incrementedRow = row + incrementArray[1];
-    let newDiskSet = diskSet;
+    let incrementedColumn = column + direction[0];
+    let incrementedRow = row + direction[1];
+    let newDiskSet = { ...diskSet };
 
     while (
       diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
@@ -167,11 +166,10 @@ function Board() {
         1
       );
 
-      incrementedColumn = incrementedColumn + incrementArray[0];
-      incrementedRow = incrementedRow + incrementArray[1];
+      incrementedColumn = incrementedColumn + direction[0];
+      incrementedRow = incrementedRow + direction[1];
     }
 
-    //ERROR: はじめ白→黒で白にする際になってくれないのを直す→[-1,-1]のところが値が間違っていた
     setDiskSet({
       ...diskSet,
       [PlayerDiskSet]: newDiskSet[PlayerDiskSet],
