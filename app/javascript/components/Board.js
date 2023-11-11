@@ -8,11 +8,9 @@ import {
   COLUMN,
 } from './constData';
 
-function Board() {
+function Board(props) {
   let [count, setCount] = useState(0);
   let [skipCounter, setSkipCounter] = useState(0);
-  let [blackDisksCount, setBlackDisksCount] = useState(2);
-  let [whiteDisksCount, setWhiteDisksCount] = useState(2);
   const [diskSet, setDiskSet] = useState({ ...defaultDiskSet });
   const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
   const [winnerColor, setwinnerColor] = useState(null);
@@ -201,13 +199,13 @@ function Board() {
     for (const i in diskSet.blackCol) {
       currentBlackSum += diskSet.blackCol[i].length;
     }
-    setBlackDisksCount(currentBlackSum);
+    props.setBlackDisksCount(currentBlackSum);
 
     let currentWhiteSum = 0;
     for (const i in diskSet.whiteCol) {
       currentWhiteSum += diskSet.whiteCol[i].length;
     }
-    setWhiteDisksCount(currentWhiteSum);
+    props.setWhiteDisksCount(currentWhiteSum);
   };
 
   const columns = [];
