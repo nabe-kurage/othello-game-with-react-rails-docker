@@ -1,24 +1,19 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## START
 
-Things you may want to cover:
+フロントサーバーを一緒に立ち上げると変更が常に更新されるようになる
+初めは時間がかかる
 
-* Ruby version
+```
+% ./bin/shakapacker
+% rails s
+```
 
-* System dependencies
+## エラーが出る場合
 
-* Configuration
+- mySQL を再起動する
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```
+% mysql.server start
+```
