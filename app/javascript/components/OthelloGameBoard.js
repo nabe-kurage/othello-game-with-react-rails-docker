@@ -5,11 +5,11 @@ import Board from './Board';
 function OthelloGameBoard() {
   let [blackDisksCount, setBlackDisksCount] = useState(2);
   let [whiteDisksCount, setWhiteDisksCount] = useState(2);
+  let [skipCounter, setSkipCounter] = useState(0);
+  const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
 
-  const checkFinish = () => {
-    if (count === squareAllNum - 1 - 4) {
-      judgeWinner();
-    }
+  const changePlayer = () => {
+    setNextPlayerBlack((isNextPlayerBlack) => !isNextPlayerBlack);
   };
 
   return (
@@ -17,10 +17,15 @@ function OthelloGameBoard() {
       <Header
         blackDisksCount={blackDisksCount}
         whiteDisksCount={whiteDisksCount}
+        skipCounter={skipCounter}
+        setSkipCounter={setSkipCounter}
       />
       <Board
-        setWhiteDisksCount={(updatedCount) => setWhiteDisksCount(updatedCount)}
-        setBlackDisksCount={(updatedCount) => setBlackDisksCount(updatedCount)}
+        isNextPlayerBlack={isNextPlayerBlack}
+        setWhiteDisksCount={setWhiteDisksCount}
+        setBlackDisksCount={setBlackDisksCount}
+        setSkipCounter={setSkipCounter}
+        changePlayer={changePlayer}
       />
     </div>
   );
