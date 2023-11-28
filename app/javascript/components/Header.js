@@ -15,6 +15,15 @@ function Header(props) {
     return `Player ${index}`;
   };
 
+  const skipButtonHandler = () => {
+    if (props.skipCounter > 0) {
+      //   judgeWinner();
+      return;
+    }
+    props.setSkipCounter(props.skipCounter + 1);
+    // changePlayer();
+  };
+
   return (
     <React.Fragment>
       <h1 className="title">Othello</h1>
@@ -31,7 +40,10 @@ function Header(props) {
           </div>
         </div>
         <div className="headerInfo">
-          <button className="skipButton">skip</button>
+          <div className="headerInfoSkipCount"> {props.skipCounter} </div>
+          <button onClick={skipButtonHandler} className="skipButton">
+            skip
+          </button>
         </div>
         <div className="player">
           <img src={Image} alt="" className="headerPlayerImg" />

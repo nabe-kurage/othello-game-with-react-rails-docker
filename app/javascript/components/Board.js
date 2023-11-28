@@ -10,9 +10,8 @@ import {
 
 function Board(props) {
   let [count, setCount] = useState(0);
-  let [skipCounter, setSkipCounter] = useState(0);
   const [diskSet, setDiskSet] = useState({ ...defaultDiskSet });
-  const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
+  //   const [isNextPlayerBlack] = useState(true);
   const [winnerColor, setwinnerColor] = useState(null);
 
   const squareClickHandlar = (column, row) => {
@@ -22,9 +21,9 @@ function Board(props) {
     putDisk(column, row);
     checkSurroundingAndFlip(column, row);
 
-    changePlayer();
+    props.changePlayer();
     setCount(count + 1);
-    setSkipCounter(0);
+    props.setSkipCounter(0);
 
     countDisks();
   };
@@ -71,11 +70,15 @@ function Board(props) {
   ) => {
     let PlayerDiskSet, OpponentPlayerDiskSet;
     if (isAi) {
-      PlayerDiskSet = isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
-      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+      PlayerDiskSet = props.isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+      OpponentPlayerDiskSet = !props.isNextPlayerBlack
+        ? COLUMN.WHITE
+        : COLUMN.BLACK;
     } else {
-      PlayerDiskSet = isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
-      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+      PlayerDiskSet = props.isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+      OpponentPlayerDiskSet = !props.isNextPlayerBlack
+        ? COLUMN.BLACK
+        : COLUMN.WHITE;
     }
 
     const incrementedColumn = column + direction[0];
@@ -133,11 +136,15 @@ function Board(props) {
   const turnOverDisk = (column, row, direction, isAi) => {
     let PlayerDiskSet, OpponentPlayerDiskSet;
     if (isAi) {
-      PlayerDiskSet = isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
-      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+      PlayerDiskSet = props.isNextPlayerBlack ? COLUMN.WHITE : COLUMN.BLACK;
+      OpponentPlayerDiskSet = !props.isNextPlayerBlack
+        ? COLUMN.WHITE
+        : COLUMN.BLACK;
     } else {
-      PlayerDiskSet = isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
-      OpponentPlayerDiskSet = !isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+      PlayerDiskSet = props.isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+      OpponentPlayerDiskSet = !props.isNextPlayerBlack
+        ? COLUMN.BLACK
+        : COLUMN.WHITE;
     }
 
     let incrementedColumn = column + direction[0];
@@ -179,8 +186,8 @@ function Board(props) {
     let newDiskSet, colName;
 
     // プレイヤーの色によってセットするデータを変更
-    colName = isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
-    newDiskSet = isNextPlayerBlack ? diskSet.blackCol : diskSet.whiteCol;
+    colName = props.isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
+    newDiskSet = props.isNextPlayerBlack ? diskSet.blackCol : diskSet.whiteCol;
 
     //　新しい板の作成。一度も置かれていない列の場合は列データ新規作成
     newDiskSet[column]
@@ -188,10 +195,6 @@ function Board(props) {
       : (newDiskSet[column] = [row]);
 
     setDiskSet({ ...diskSet, [colName]: newDiskSet });
-  };
-
-  const changePlayer = () => {
-    setNextPlayerBlack((isNextPlayerBlack) => !isNextPlayerBlack);
   };
 
   const countDisks = () => {
