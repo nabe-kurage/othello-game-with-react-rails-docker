@@ -17,11 +17,11 @@ function Header(props) {
 
   const skipButtonHandler = () => {
     if (props.skipCounter > 0) {
-      //   judgeWinner();
+      props.judgeWinner();
       return;
     }
     props.setSkipCounter(props.skipCounter + 1);
-    // changePlayer();
+    props.changePlayer();
   };
 
   return (
@@ -36,7 +36,7 @@ function Header(props) {
             <span className="headerPlayerInfoBlackSquare">&nbsp;●</span>
           </div>
           <div className="headerPlayerInfoCount">
-            Count:{props.blackDisksCount}
+            Count:{props.disksCount.black}
           </div>
         </div>
         <div className="headerInfo">
@@ -52,7 +52,7 @@ function Header(props) {
             color:
             <span className="headerPlayerInfoWhiteSquare">&nbsp;●</span>
             <div className="headerPlayerInfoCount">
-              Count:{props.whiteDisksCount}
+              Count:{props.disksCount.white}
             </div>
           </div>
         </div>

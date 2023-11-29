@@ -10,8 +10,6 @@ import {
 
 function Board(props) {
   let [count, setCount] = useState(0);
-  const [diskSet, setDiskSet] = useState({ ...defaultDiskSet });
-  //   const [isNextPlayerBlack] = useState(true);
   const [winnerColor, setwinnerColor] = useState(null);
 
   const squareClickHandlar = (column, row) => {
@@ -56,8 +54,8 @@ function Board(props) {
 
   const isOccupiedSquare = (column, row) => {
     return (
-      diskSet.whiteCol[column]?.indexOf(row) > -1 ||
-      diskSet.blackCol[column]?.indexOf(row) > -1
+      props.diskSet.whiteCol[column]?.indexOf(row) > -1 ||
+      props.diskSet.blackCol[column]?.indexOf(row) > -1
     );
   };
 
@@ -114,14 +112,15 @@ function Board(props) {
     incrementedRow
   ) => {
     return (
-      diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
+      props.diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
         incrementedRow
       ) > -1
     );
   };
   const foundMyDisk = (PlayerDiskSet, incrementedColumn, incrementedRow) => {
     return (
-      diskSet[PlayerDiskSet][incrementedColumn]?.indexOf(incrementedRow) > -1
+      props.diskSet[PlayerDiskSet][incrementedColumn]?.indexOf(incrementedRow) >
+      -1
     );
   };
 
@@ -149,10 +148,10 @@ function Board(props) {
 
     let incrementedColumn = column + direction[0];
     let incrementedRow = row + direction[1];
-    let newDiskSet = { ...diskSet };
+    let newDiskSet = { ...props.diskSet };
 
     while (
-      diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
+      props.diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
         incrementedRow
       ) > -1
     ) {
@@ -165,7 +164,7 @@ function Board(props) {
 
       // 相手の減る持ちコマ
       newDiskSet[OpponentPlayerDiskSet][incrementedColumn].splice(
-        diskSet[OpponentPlayerDiskSet][incrementedColumn].indexOf(
+        props.diskSet[OpponentPlayerDiskSet][incrementedColumn].indexOf(
           incrementedRow
         ),
         1
@@ -175,8 +174,8 @@ function Board(props) {
       incrementedRow = incrementedRow + direction[1];
     }
 
-    setDiskSet({
-      ...diskSet,
+    props.setDiskSet({
+      ...props.diskSet,
       [PlayerDiskSet]: newDiskSet[PlayerDiskSet],
       [OpponentPlayerDiskSet]: newDiskSet[OpponentPlayerDiskSet],
     });
@@ -187,28 +186,29 @@ function Board(props) {
 
     // プレイヤーの色によってセットするデータを変更
     colName = props.isNextPlayerBlack ? COLUMN.BLACK : COLUMN.WHITE;
-    newDiskSet = props.isNextPlayerBlack ? diskSet.blackCol : diskSet.whiteCol;
+    newDiskSet = props.isNextPlayerBlack
+      ? props.diskSet.blackCol
+      : props.diskSet.whiteCol;
 
     //　新しい板の作成。一度も置かれていない列の場合は列データ新規作成
     newDiskSet[column]
       ? newDiskSet[column].push(row)
       : (newDiskSet[column] = [row]);
 
-    setDiskSet({ ...diskSet, [colName]: newDiskSet });
+    props.setDiskSet({ ...props.diskSet, [colName]: newDiskSet });
   };
 
   const countDisks = () => {
     let currentBlackSum = 0;
-    for (const i in diskSet.blackCol) {
-      currentBlackSum += diskSet.blackCol[i].length;
+    for (const i in props.diskSet.blackCol) {
+      currentBlackSum += props.diskSet.blackCol[i].length;
     }
-    props.setBlackDisksCount(currentBlackSum);
 
     let currentWhiteSum = 0;
-    for (const i in diskSet.whiteCol) {
-      currentWhiteSum += diskSet.whiteCol[i].length;
+    for (const i in props.diskSet.whiteCol) {
+      currentWhiteSum += props.diskSet.whiteCol[i].length;
     }
-    props.setWhiteDisksCount(currentWhiteSum);
+    props.setDisksCount({ black: currentBlackSum, white: currentWhiteSum });
   };
 
   const columns = [];
@@ -217,7 +217,7 @@ function Board(props) {
       <Column
         key={i}
         columnNum={i}
-        diskSet={diskSet}
+        diskSet={props.diskSet}
         squareClickHandlar={squareClickHandlar}
       />
     );
