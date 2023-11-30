@@ -23,6 +23,7 @@ function Board(props) {
 
     countDisks();
     checkFinish();
+    //   aiCheck()
   };
 
   const isGameOver = () => {
@@ -83,11 +84,11 @@ function Board(props) {
 
     // 　敵のコマがある場合は、再帰関数で次のマスをチェック
     if (
-      foundOpponentDisk(
-        OpponentPlayerDiskSet,
+      foundDisk({
+        DiskSet: OpponentPlayerDiskSet,
         incrementedColumn,
-        incrementedRow
-      )
+        incrementedRow,
+      })
     ) {
       return isPossibleToTurnOverOneDirection(
         incrementedColumn,
@@ -101,25 +102,18 @@ function Board(props) {
     // はじめ(0)は自分のコマなので除外
     if (index === 0) return false;
     // 最終的に自分のコマがあるかチェック
-    return foundMyDisk(PlayerDiskSet, incrementedColumn, incrementedRow);
+    return foundDisk({
+      DiskSet: PlayerDiskSet,
+      incrementedColumn,
+      incrementedRow,
+    });
   };
 
-  // foundOpponentDiskとfoundMyDiskはまとめられそう
-  const foundOpponentDisk = (
-    OpponentPlayerDiskSet,
-    incrementedColumn,
-    incrementedRow
-  ) => {
+  const foundDisk = (argumentSets) => {
     return (
-      props.diskSet[OpponentPlayerDiskSet][incrementedColumn]?.indexOf(
-        incrementedRow
-      ) > -1
-    );
-  };
-  const foundMyDisk = (PlayerDiskSet, incrementedColumn, incrementedRow) => {
-    return (
-      props.diskSet[PlayerDiskSet][incrementedColumn]?.indexOf(incrementedRow) >
-      -1
+      props.diskSet[argumentSets.DiskSet][
+        argumentSets.incrementedColumn
+      ]?.indexOf(argumentSets.incrementedRow) > -1
     );
   };
 
