@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Board from './Board';
-import { defaultDiskSet } from './constData';
+import { DEFAULT_DISK_SET } from './constData';
 
 function OthelloGameBoard() {
   let [disksCount, setDisksCount] = useState({
@@ -10,7 +10,7 @@ function OthelloGameBoard() {
   });
   let [skipCounter, setSkipCounter] = useState(0);
   const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
-  const [diskSet, setDiskSet] = useState({ ...defaultDiskSet });
+  const [diskSet, setDiskSet] = useState({ ...DEFAULT_DISK_SET });
   const [winnerColor, setwinnerColor] = useState(null);
 
   const changePlayer = () => {

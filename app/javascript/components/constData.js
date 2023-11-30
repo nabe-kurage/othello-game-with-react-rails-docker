@@ -1,5 +1,5 @@
 export const GRID_COUNT = { column: 8, row: 8 };
-export const directionsArray = [
+export const DIRECTIONS_ARRAY = [
   [0, 1],
   [0, -1],
   [1, 0],
@@ -18,7 +18,7 @@ export const COLUMN = {
   WHITE: 'whiteCol',
 };
 
-export const defaultDiskSet = {
+export const DEFAULT_DISK_SET = {
   [COLUMN.WHITE]: {
     3: [3],
     4: [4],

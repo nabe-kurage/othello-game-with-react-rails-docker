@@ -234,7 +234,7 @@
   content: 'H';
 }
 
-.square:hover {
+.square:not(.occupied):hover {
   background-color: rgba(225, 225, 225, 0.2);
 }
 

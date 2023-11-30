@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import {
   GRID_COUNT,
-  directionsArray,
+  DIRECTIONS_ARRAY,
   TOTAL_PLAYABLE_COUNT,
   COLUMN,
 } from './constData';
@@ -36,12 +36,12 @@ function Board(props) {
     }
 
     // となりあったマスのコマの状態を見て置けるかどうかを判断
-    for (let i = 0; i < directionsArray.length; i++) {
+    for (let i = 0; i < DIRECTIONS_ARRAY.length; i++) {
       if (
         isPossibleToTurnOverOneDirection(
           column,
           row,
-          directionsArray[i],
+          DIRECTIONS_ARRAY[i],
           0,
           false
         )
@@ -118,7 +118,7 @@ function Board(props) {
   };
 
   const checkSurroundingAndFlip = (column, row) => {
-    directionsArray.forEach((direction) => {
+    DIRECTIONS_ARRAY.forEach((direction) => {
       if (isPossibleToTurnOverOneDirection(column, row, direction, 0, false)) {
         turnOverDisk(column, row, direction, false);
       }
@@ -244,6 +244,7 @@ class Column extends React.Component {
 }
 
 class Square extends React.Component {
+  // こここの書き方でいいんか？const?
   checkFirstSet(column, row) {
     if (this.props.diskSet.blackCol[column]?.indexOf(row) > -1) {
       return <Disk color="black" />;
@@ -252,11 +253,24 @@ class Square extends React.Component {
       return <Disk color="white" />;
     }
   }
+  isOccupied(column, row) {
+    if (
+      this.props.diskSet.blackCol[column]?.indexOf(row) > -1 ||
+      this.props.diskSet.whiteCol[column]?.indexOf(row) > -1
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   render() {
     return (
       <div
-        className="square"
+        className={`square ${
+          this.isOccupied(this.props.columnNum, this.props.rowNum)
+            ? 'occupied'
+            : ''
+        }`}
         data-column={this.props.columnNum}
         data-row={this.props.rowNum}
         onClick={() => {
