@@ -1,16 +1,14 @@
 // tsに変更したい…
 import React, { useState } from 'react';
 import {
-  squareNum,
+  GRID_COUNT,
   directionsArray,
-  squareAllNum,
-  defaultDiskSet,
+  TOTAL_PLAYABLE_COUNT,
   COLUMN,
 } from './constData';
 
 function Board(props) {
   let [count, setCount] = useState(0);
-  const [winnerColor, setwinnerColor] = useState(null);
 
   const squareClickHandlar = (column, row) => {
     // ゲーム終了、コマの置けるかどうかのチェック
@@ -24,10 +22,11 @@ function Board(props) {
     props.setSkipCounter(0);
 
     countDisks();
+    checkFinish();
   };
 
   const isGameOver = () => {
-    return !!winnerColor;
+    return !!props.winnerColor;
   };
 
   const isPlaceableSquare = (column, row) => {
@@ -211,8 +210,14 @@ function Board(props) {
     props.setDisksCount({ black: currentBlackSum, white: currentWhiteSum });
   };
 
+  const checkFinish = () => {
+    if (count === TOTAL_PLAYABLE_COUNT - 1) {
+      props.judgeWinner();
+    }
+  };
+
   const columns = [];
-  for (let i = 0; i < squareNum.column; i++) {
+  for (let i = 0; i < GRID_COUNT.column; i++) {
     columns.push(
       <Column
         key={i}
@@ -229,7 +234,7 @@ function Board(props) {
 class Column extends React.Component {
   render() {
     const squares = [];
-    for (let i = 0; i < squareNum.row; i++) {
+    for (let i = 0; i < GRID_COUNT.row; i++) {
       squares.push(
         <Square
           key={i}

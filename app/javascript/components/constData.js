@@ -1,4 +1,4 @@
-export const squareNum = { column: 8, row: 8 };
+export const GRID_COUNT = { column: 8, row: 8 };
 export const directionsArray = [
   [0, 1],
   [0, -1],
@@ -9,7 +9,9 @@ export const directionsArray = [
   [-1, 1],
   [-1, -1],
 ];
-export const squareAllNum = 64;
+export const TOTAL_GRID_COUNT = 64;
+export const FIRST_DISK_COUNT = 4;
+export const TOTAL_PLAYABLE_COUNT = TOTAL_GRID_COUNT - FIRST_DISK_COUNT;
 
 export const COLUMN = {
   BLACK: 'blackCol',

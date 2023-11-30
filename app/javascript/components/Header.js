@@ -1,5 +1,6 @@
 import React from 'react';
-import Image from '../images/othello-character.svg';
+import Player from '../images/othello-character-player.png';
+import Monster from '../images/othello-character-monster.png';
 import { COLUMN } from './constData';
 
 function Header(props) {
@@ -16,8 +17,8 @@ function Header(props) {
   };
 
   const skipButtonHandler = () => {
-    if (props.skipCounter > 0) {
-      props.judgeWinner();
+    if (props.skipCounter > 1) {
+      props.judgeLoser();
       return;
     }
     props.setSkipCounter(props.skipCounter + 1);
@@ -29,7 +30,7 @@ function Header(props) {
       <h1 className="title">Othello</h1>
       <div className="header">
         <div className="player">
-          <img src={Image} alt="" className="headerPlayerImg" />
+          <img src={Player} alt="" className="headerPlayerImg" />
           <div>{playerName(1, COLUMN.BLACK)}</div>
           <div>
             color:
@@ -44,9 +45,10 @@ function Header(props) {
           <button onClick={skipButtonHandler} className="skipButton">
             skip
           </button>
+          {props.winnerColor ? <div> Winner: {props.winnerColor}</div> : null}
         </div>
         <div className="player">
-          <img src={Image} alt="" className="headerPlayerImg" />
+          <img src={Monster} alt="" className="headerPlayerImg" />
           <div>{playerName(1, COLUMN.WHITE)}</div>
           <div>
             color:
