@@ -17,19 +17,30 @@ function Header(props) {
   };
 
   const skipButtonHandler = () => {
-    props.setSkipCounters({
-      black: props.isNextPlayerBlack
-        ? props.skipCounters.black + 1
-        : props.skipCounters.black,
-      white: props.isNextPlayerBlack
-        ? props.skipCounters.white
-        : props.skipCounters.white + 1,
-    });
-    console.log(props.skipCounters.black);
-    if (props.skipCounters.black > 2 || props.skipCounters.white > 2) {
-      props.judgeLoser();
-      return;
+    if (props.winnerColor) return;
+    // useEffectを使えば非同期でnextCounter不要になるかも
+    if (props.isNextPlayerBlack) {
+      const nextCounter = props.skipCounters.black + 1;
+      props.setSkipCounters({
+        ...props.skipCounters,
+        black: nextCounter,
+      });
+      if (nextCounter > 2) {
+        props.judgeLoser();
+        return;
+      }
+    } else {
+      const nextCounter = props.skipCounters.white + 1;
+      props.setSkipCounters({
+        ...props.skipCounters,
+        white: nextCounter,
+      });
+      if (nextCounter > 2) {
+        props.judgeLoser();
+        return;
+      }
     }
+
     props.changePlayer();
   };
 
