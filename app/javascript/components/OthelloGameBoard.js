@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Board from './Board';
-import { DEFAULT_DISK_SET } from './constData';
+import { DEFAULT_DISK_SET, COLUMN } from './constData';
 
 function OthelloGameBoard() {
   let [disksCount, setDisksCount] = useState({
@@ -12,6 +12,8 @@ function OthelloGameBoard() {
   const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
   const [diskSet, setDiskSet] = useState({ ...DEFAULT_DISK_SET });
   const [winnerColor, setwinnerColor] = useState(null);
+  // とりあえずAI=白設定しておく;
+  const [aiColor, setAiColor] = useState(COLUMN.WHITE);
 
   const changePlayer = () => {
     setNextPlayerBlack((isNextPlayerBlack) => !isNextPlayerBlack);
@@ -54,6 +56,7 @@ function OthelloGameBoard() {
         judgeLoser={judgeLoser}
         changePlayer={changePlayer}
         winnerColor={winnerColor}
+        aiColor={aiColor}
       />
       <Board
         isNextPlayerBlack={isNextPlayerBlack}
@@ -65,6 +68,8 @@ function OthelloGameBoard() {
         changePlayer={changePlayer}
         winnerColor={winnerColor}
         judgeWinner={judgeWinner}
+        aiColor={aiColor}
+        setAiColor={setAiColor}
       />
     </div>
   );

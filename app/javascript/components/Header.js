@@ -6,10 +6,8 @@ import { COLUMN } from './constData';
 function Header(props) {
   const playerName = (index, squareColor) => {
     if (
-      //   ここあとで修正
-      // (aiColor === COLUMN.WHITE && squareColor === COLUMN.WHITE) ||
-      // (aiColor === COLUMN.BLACK && squareColor === COLUMN.BLACK)
-      squareColor === COLUMN.WHITE
+      (props.aiColor === COLUMN.WHITE && squareColor === COLUMN.WHITE) ||
+      (props.aiColor === COLUMN.BLACK && squareColor === COLUMN.BLACK)
     ) {
       return `Computer`;
     }

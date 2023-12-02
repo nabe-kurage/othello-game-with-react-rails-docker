@@ -5,7 +5,10 @@ import {
   DIRECTIONS_ARRAY,
   TOTAL_PLAYABLE_COUNT,
   COLUMN,
+  DEFAULT_DISK_SET,
 } from './constData';
+import { GreedyPlayer } from './othelloAI';
+const othelloAi = new GreedyPlayer();
 
 function Board(props) {
   let [count, setCount] = useState(0);
@@ -27,7 +30,12 @@ function Board(props) {
 
     countDisks();
     checkFinish();
-    //   aiCheck()
+    // TODO: AI使わない場合は分岐を追加
+    if (props.aiColor !== null) {
+      setTimeout(() => {
+        aiCheck();
+      }, 1500);
+    }
   };
 
   const isGameOver = () => {
@@ -211,6 +219,47 @@ function Board(props) {
   const checkFinish = () => {
     if (count === TOTAL_PLAYABLE_COUNT - 1) {
       props.judgeWinner();
+    }
+  };
+
+  const aiCheck = () => {
+    //   これ何？
+    const afterChangesNextPlayer = !props.isNextPlayerBlack;
+    console.log(afterChangesNextPlayer);
+    if (!afterChangesNextPlayer) {
+      const aiDesc = othelloAi.computeBestMove(DEFAULT_DISK_SET, false);
+      console.log(aiDesc);
+
+      let newDiskSet;
+      newDiskSet = props.diskSet.whiteCol;
+      if (newDiskSet[aiDesc.column]) {
+        newDiskSet[aiDesc.column].push(aiDesc.row);
+      } else {
+        newDiskSet[aiDesc.column] = [aiDesc.row];
+      }
+      props.setDiskSet({ ...props.diskSet, [aiDesc.colName]: newDiskSet });
+
+      DIRECTIONS_ARRAY.forEach((direction) => {
+        if (
+          isPossibleToTurnOverOneDirection(
+            aiDesc.column,
+            aiDesc.row,
+            direction,
+            0,
+            true
+          )
+        ) {
+          turnOverDisk(aiDesc.column, aiDesc.row, direction, true);
+        }
+      });
+      setCount(count + 1);
+      props.setSkipCounters({
+        black: props.isNextPlayerBlack ? 0 : props.skipCounters.black,
+        white: props.isNextPlayerBlack ? props.skipCounters.white : 0,
+      });
+      props.changePlayer();
+      countDisks();
+      checkFinish();
     }
   };
 
