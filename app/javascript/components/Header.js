@@ -17,11 +17,19 @@ function Header(props) {
   };
 
   const skipButtonHandler = () => {
-    if (props.skipCounter > 1) {
+    props.setSkipCounters({
+      black: props.isNextPlayerBlack
+        ? props.skipCounters.black + 1
+        : props.skipCounters.black,
+      white: props.isNextPlayerBlack
+        ? props.skipCounters.white
+        : props.skipCounters.white + 1,
+    });
+    console.log(props.skipCounters.black);
+    if (props.skipCounters.black > 2 || props.skipCounters.white > 2) {
       props.judgeLoser();
       return;
     }
-    props.setSkipCounter(props.skipCounter + 1);
     props.changePlayer();
   };
 
@@ -39,9 +47,10 @@ function Header(props) {
           <div className="headerPlayerInfoCount">
             Count:{props.disksCount.black}
           </div>
+          <div>SkipCount:{props.skipCounters.black}</div>
         </div>
         <div className="headerInfo">
-          <div className="headerInfoSkipCount"> {props.skipCounter} </div>
+          <div>It's {props.isNextPlayerBlack ? 'black' : 'white'}'s turn</div>
           <button onClick={skipButtonHandler} className="skipButton">
             skip
           </button>
@@ -56,6 +65,7 @@ function Header(props) {
             <div className="headerPlayerInfoCount">
               Count:{props.disksCount.white}
             </div>
+            <div>SkipCount:{props.skipCounters.white}</div>
           </div>
         </div>
       </div>

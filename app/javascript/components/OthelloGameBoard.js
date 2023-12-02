@@ -8,7 +8,7 @@ function OthelloGameBoard() {
     black: 2,
     white: 2,
   });
-  let [skipCounter, setSkipCounter] = useState(0);
+  let [skipCounters, setSkipCounters] = useState({ black: 0, white: 0 });
   const [isNextPlayerBlack, setNextPlayerBlack] = useState(true);
   const [diskSet, setDiskSet] = useState({ ...DEFAULT_DISK_SET });
   const [winnerColor, setwinnerColor] = useState(null);
@@ -18,8 +18,11 @@ function OthelloGameBoard() {
   };
 
   const judgeLoser = () => {
-    // ユーザーが白黒量表選べるようになったら変更する
-    setwinnerColor('white');
+    if (skipCounters.black > 2) {
+      setwinnerColor('white');
+    } else {
+      setwinnerColor('black');
+    }
   };
   const judgeWinner = () => {
     let blackDiskNumber = 0;
@@ -44,9 +47,10 @@ function OthelloGameBoard() {
   return (
     <div className="App">
       <Header
+        isNextPlayerBlack={isNextPlayerBlack}
         disksCount={disksCount}
-        skipCounter={skipCounter}
-        setSkipCounter={setSkipCounter}
+        skipCounters={skipCounters}
+        setSkipCounters={setSkipCounters}
         judgeLoser={judgeLoser}
         changePlayer={changePlayer}
         winnerColor={winnerColor}
@@ -54,7 +58,8 @@ function OthelloGameBoard() {
       <Board
         isNextPlayerBlack={isNextPlayerBlack}
         setDisksCount={setDisksCount}
-        setSkipCounter={setSkipCounter}
+        skipCounters={skipCounters}
+        setSkipCounters={setSkipCounters}
         diskSet={diskSet}
         setDiskSet={setDiskSet}
         changePlayer={changePlayer}

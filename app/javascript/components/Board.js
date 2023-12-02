@@ -17,9 +17,13 @@ function Board(props) {
     putDisk(column, row);
     checkSurroundingAndFlip(column, row);
 
+    props.setSkipCounters({
+      black: props.isNextPlayerBlack ? 0 : props.skipCounters.black,
+      white: props.isNextPlayerBlack ? props.skipCounters.white : 0,
+    });
+
     props.changePlayer();
     setCount(count + 1);
-    props.setSkipCounter(0);
 
     countDisks();
     checkFinish();
@@ -244,7 +248,7 @@ class Column extends React.Component {
 }
 
 class Square extends React.Component {
-  // こここの書き方でいいんか？const?
+  // classの書き方なのでメソッド定義
   checkFirstSet(column, row) {
     if (this.props.diskSet.blackCol[column]?.indexOf(row) > -1) {
       return <Disk color="black" />;
