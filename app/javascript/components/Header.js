@@ -52,31 +52,33 @@ function Header(props) {
           <img src={Player} alt="" className="headerPlayerImg" />
           <div>{playerName(1, COLUMN.BLACK)}</div>
           <div>
-            color:
+            Color:
             <span className="headerPlayerInfoBlackSquare">&nbsp;●</span>
           </div>
           <div className="headerPlayerInfoCount">
-            Count:{props.disksCount.black}
+            Count: {props.disksCount.black}
           </div>
-          <div>SkipCount:{props.skipCounters.black}</div>
+          <div>SkipCount: {props.skipCounters.black}</div>
         </div>
         <div className="headerInfo">
           <div>It's {props.isNextPlayerBlack ? 'black' : 'white'}'s turn</div>
           <button onClick={skipButtonHandler} className="skipButton">
             skip
           </button>
-          {props.winnerColor ? <div> Winner: {props.winnerColor}</div> : null}
+          {props.winnerColor ? (
+            <div className="winnerInfo"> Winner: {props.winnerColor}</div>
+          ) : null}
         </div>
         <div className="player">
           <img src={Monster} alt="" className="headerPlayerImg" />
           <div>{playerName(1, COLUMN.WHITE)}</div>
           <div>
-            color:
+            Color:
             <span className="headerPlayerInfoWhiteSquare">&nbsp;●</span>
             <div className="headerPlayerInfoCount">
-              Count:{props.disksCount.white}
+              Count: {props.disksCount.white}
             </div>
-            <div>SkipCount:{props.skipCounters.white}</div>
+            <div>SkipCount: {props.skipCounters.white}</div>
           </div>
         </div>
       </div>
