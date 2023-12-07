@@ -16,6 +16,9 @@ function Board(props) {
   const squareClickHandlar = (column, row) => {
     // ゲーム終了、コマの置けるかどうかのチェック
     if (isGameOver() || !isPlaceableSquare(column, row)) return;
+    // AIターンの際にクリックできないように
+    if (props.aiColor === COLUMN.WHITE && !props.isNextPlayerBlack) return;
+    if (props.aiColor === COLUMN.BLACK && props.isNextPlayerBlack) return;
 
     putDisk(column, row);
     checkSurroundingAndFlip(column, row);
@@ -319,9 +322,9 @@ class Square extends React.Component {
   render() {
     return (
       <div
-        className={`square ${
+        className={`square${
           this.isOccupied(this.props.columnNum, this.props.rowNum)
-            ? 'occupied'
+            ? ' occupied'
             : ''
         }`}
         data-column={this.props.columnNum}
