@@ -6,7 +6,7 @@
 初めは時間がかかる
 
 ```
-% ./bin/shakapacker
+% ./bin/shakapacker --watch --progress
 % rails s
 ```
 
