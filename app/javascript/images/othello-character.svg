@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 200 200" style="enable-background:new 0 0 200 200;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#FFFFFF;}
+	.st1{clip-path:url(#SVGID_00000124133285170836010910000000105982313901708728_);fill:#FFFFFF;}
+</style>
+<g id="レイヤー_2">
+	<g>
+		<circle cx="-57.5" cy="180.5" r="0.5"/>
+		<path class="st0" d="M-57.5,180c-0.28,0-0.5,0.22-0.5,0.5s0.22,0.5,0.5,0.5s0.5-0.22,0.5-0.5S-57.22,180-57.5,180L-57.5,180z"/>
+	</g>
+	<g>
+		<g>
+			<circle class="st0" cx="100" cy="90" r="68"/>
+		</g>
+		<g>
+			<defs>
+				<ellipse id="SVGID_1_" cx="101" cy="272.5" rx="99" ry="119.5"/>
+			</defs>
+			<use xlink:href="#SVGID_1_"  style="overflow:visible;fill:#FFFFFF;"/>
+			<clipPath id="SVGID_00000160190714759860580900000017506133667850551994_">
+				<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+			</clipPath>
+			
+				<circle style="clip-path:url(#SVGID_00000160190714759860580900000017506133667850551994_);fill:#FFFFFF;" cx="56" cy="86" r="9"/>
+		</g>
+	</g>
+	<polygon points="217.04,-31.3 216.92,-29.64 215.54,-30.56 	"/>
+</g>
+<g id="レイヤー_3">
+	<g>
+		<ellipse cx="57.5" cy="91.5" rx="4.5" ry="9.5"/>
+		<ellipse cx="142.5" cy="91.5" rx="4.5" ry="9.5"/>
+	</g>
+</g>
+</svg>

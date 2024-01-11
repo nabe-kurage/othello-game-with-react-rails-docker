@@ -13,3 +13,278 @@
  *= require_tree .
  *= require_self
  */
+
+:root {
+  --outer-border-color: #e88b51;
+  --inner-border-color: #b36339;
+  --font-color: #f7d185;
+  --button-color: #e8844a;
+  --background-color: linear-gradient(#6abd83, #7eba83);
+  --background-upside-color: #4c3748;
+  --background-downside-color: #141226;
+  --black-square-color: #dc5750;
+  --black-bright-color: #ef7a74;
+  --black-dark-color: #b43333;
+  --white-square-color: #fefbe6;
+  --white-bright-color: #fdfcf1;
+  --white-dark-color: #dac099;
+}
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+  min-height: 100vh;
+  background-image: linear-gradient(
+    var(--background-upside-color),
+    var(--background-downside-color)
+  );
+  /* background-image: linear-gradient(#1d4261, #0a0e1c);  　未来型*/
+  color: var(--font-color);
+  font-size: 2rem;
+}
+
+.title {
+  margin: 48px 0 0;
+}
+
+.header {
+  display: flex;
+  margin-top: 8px;
+  width: 640px;
+  justify-content: space-between;
+  font-size: 1.4rem;
+}
+
+.headerPlayerInfoBlackSquare {
+  color: var(--black-square-color);
+}
+
+.headerPlayerInfoWhiteSquare {
+  color: var(--white-square-color);
+}
+
+.headerPlayerImg {
+  background: var(--font-color);
+  width: 100px;
+  height: 100px;
+  border: none;
+  border: 4px solid var(--font-color);
+  box-shadow: 0 0px 10px var(--font-color);
+}
+
+.headerInfo {
+  text-align: center;
+}
+
+.skipButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  padding: 8px 16px;
+  margin-top: 8px;
+  appearance: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  background: var(--button-color);
+  box-shadow: 0 0px 10px var(--button-color);
+  color: var(--background-upside-color);
+  border-radius: 16px;
+  transition: box-shadow 0.1s ease-in-out;
+  /* なぜかわからないけど設定しないと当たらなかった */
+  font-family: 'Quantico', sans-serif;
+}
+
+.skipButton:hover {
+  box-shadow: 0 0 0 #5aa582;
+}
+
+.winnerInfo {
+  margin-top: 8px;
+}
+
+.board {
+  border: 4px solid var(--outer-border-color);
+  display: flex;
+  width: 640px;
+  height: 640px;
+  border-radius: 40px;
+  margin: 48px 0;
+  background: rgba(224, 192, 160, 0.1);
+  box-shadow: 0 0px 4px var(--outer-border-color);
+}
+
+.square {
+  border: 1px solid var(--inner-border-color);
+  width: 80px;
+  height: 80px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  display: flex;
+  cursor: pointer;
+  position: relative;
+}
+
+.column:first-child .square {
+  border-left: transparent;
+}
+
+.column:last-child .square {
+  border-right: transparent;
+}
+
+.column .square:first-child {
+  border-top: transparent;
+}
+
+.column .square:last-child {
+  border-bottom: transparent;
+}
+
+.column:first-child .square:first-child {
+  border-top-left-radius: 36px;
+}
+
+.column:last-child .square:first-child {
+  border-top-right-radius: 36px;
+}
+
+.column:first-child .square:last-child {
+  border-bottom-left-radius: 36px;
+}
+
+.column:last-child .square:last-child {
+  border-bottom-right-radius: 36px;
+}
+
+.column:nth-of-type(2) .square:nth-of-type(2):after,
+.column:nth-of-type(2) .square:nth-of-type(6):after,
+.column:nth-of-type(6) .square:nth-of-type(2):after,
+.column:nth-of-type(6) .square:nth-of-type(6):after {
+  background: var(--inner-border-color);
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  transform: translate(50%, 50%);
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.column:first-child .square:before {
+  content: '1';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  left: -26px;
+  height: 20px;
+  font-size: 1.1rem;
+}
+
+.column:first-child .square:nth-child(2):before {
+  content: '2';
+}
+.column:first-child .square:nth-child(3):before {
+  content: '3';
+}
+.column:first-child .square:nth-child(4):before {
+  content: '4';
+}
+.column:first-child .square:nth-child(5):before {
+  content: '5';
+}
+.column:first-child .square:nth-child(6):before {
+  content: '6';
+}
+.column:first-child .square:nth-child(7):before {
+  content: '7';
+}
+.column:first-child .square:nth-child(8):before {
+  content: '8';
+}
+
+.square:first-child:after {
+  content: 'A';
+  position: absolute;
+  top: -30px;
+  margin: auto;
+  left: 0;
+  right: 0;
+  width: 20px;
+  font-size: 1.1rem;
+}
+
+.column:nth-child(2) .square:first-child:after {
+  content: 'B';
+}
+.column:nth-child(3) .square:first-child:after {
+  content: 'C';
+}
+.column:nth-child(4) .square:first-child:after {
+  content: 'D';
+}
+.column:nth-child(5) .square:first-child:after {
+  content: 'E';
+}
+.column:nth-child(6) .square:first-child:after {
+  content: 'F';
+}
+.column:nth-child(7) .square:first-child:after {
+  content: 'G';
+}
+.column:nth-child(8) .square:first-child:after {
+  content: 'H';
+}
+
+.square:not(.occupied):hover {
+  background-color: rgba(225, 225, 225, 0.2);
+}
+
+.disk {
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  position: relative;
+  transform: translateY(4px);
+}
+
+.disk::after {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  border-radius: 50%;
+}
+
+.disk--black {
+  background: var(--black-dark-color);
+  box-shadow: 0 0px 10px var(--black-dark-color);
+}
+
+.disk--black::after {
+  background-image: linear-gradient(
+    var(--black-bright-color),
+    var(--black-square-color)
+  );
+}
+
+.disk--white {
+  background: var(--white-dark-color);
+  box-shadow: 0 0px 6px var(--white-dark-color);
+}
+
+.disk--white::after {
+  background: linear-gradient(
+    var(--white-bright-color),
+    var(--white-square-color)
+  );
+}
