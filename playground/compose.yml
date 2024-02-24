@@ -1,0 +1,21 @@
+services:
+  db:
+    image: mariadb:10.9
+    environment:
+      MARIADB_ROOT_PASSWORD: password
+    volumes:
+      - db-data:/var/lib/mysql
+  #webコンテナ
+  web:
+    #webコンテナの方は、buildでDockerfileを指定している
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_PASSWORD: password
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/docker_rails_test
+volumes:
+  db-data:
